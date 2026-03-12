@@ -1,0 +1,163 @@
+import type { Resource } from '../types';
+
+export const RESOURCES: Resource[] = [
+  {
+    name: 'Slow German',
+    desc: 'Podcast dengan kecepatan lambat, cocok untuk A2-B1. Topik budaya dan kehidupan Jerman.',
+    level: 'A2-B1',
+    free: true,
+    url: 'https://slowgerman.com',
+    type: 'podcast',
+  },
+  {
+    name: 'DW Deutsch Lernen',
+    desc: 'Kursus resmi Deutsche Welle untuk semua level. Ada video, audio, dan latihan interaktif.',
+    level: 'A1-C1',
+    free: true,
+    url: 'https://learngerman.dw.com',
+    type: 'video',
+  },
+  {
+    name: 'Easy German (YouTube)',
+    desc: 'Video jalanan dengan subtitle Jerman dan Inggris. Sangat bagus untuk listening dan kosakata.',
+    level: 'A2-B2',
+    free: true,
+    url: 'https://www.youtube.com/@EasyGerman',
+    type: 'video',
+  },
+  {
+    name: "Nicos Weg (ARD/DW)",
+    desc: 'Serial video pembelajaran untuk A1-B1 dengan latihan online terintegrasi.',
+    level: 'A1-B1',
+    free: true,
+    url: 'https://www.dw.com/de/deutsch-lernen/nicos-weg/s-52715',
+    type: 'video',
+  },
+  {
+    name: 'SWR Extra',
+    desc: 'Berita bahasa Jerman sederhana dari SWR. Artikel pendek dengan kosakata B1.',
+    level: 'B1',
+    free: true,
+    url: 'https://www.swr.de/extra/article-swr-bescheid-wissen-100.html',
+    type: 'podcast',
+  },
+  {
+    name: 'Goethe Institut Online',
+    desc: 'Materi resmi dari Goethe Institut. Latihan ujian, kosakata, dan tata bahasa terstruktur.',
+    level: 'A1-C2',
+    free: false,
+    url: 'https://www.goethe.de/en/spr/ueb.html',
+    type: 'video',
+  },
+  {
+    name: 'Anki',
+    desc: 'Aplikasi flashcard berbasis spaced repetition. Import deck Jerman gratis dari AnkiWeb.',
+    level: 'A1-C2',
+    free: true,
+    url: 'https://apps.ankiweb.net',
+    type: 'app',
+  },
+  {
+    name: 'Tandem',
+    desc: 'Language exchange app. Cari partner native speaker Jerman untuk latihan percakapan.',
+    level: 'A2-C2',
+    free: true,
+    url: 'https://www.tandem.net',
+    type: 'app',
+  },
+  {
+    name: 'italki',
+    desc: 'Platform les privat dengan tutor native. Ada community tutor yang lebih terjangkau.',
+    level: 'A1-C2',
+    free: false,
+    url: 'https://www.italki.com',
+    type: 'app',
+  },
+  {
+    name: 'Preply',
+    desc: 'Les online dengan tutor bersertifikat. Jadwal fleksibel, bisa pilih spesialisasi.',
+    level: 'A1-C2',
+    free: false,
+    url: 'https://preply.com',
+    type: 'app',
+  },
+  {
+    name: 'Deutsche Welle Podcast',
+    desc: 'Beragam podcast topik dari DW: berita, budaya, sains. Kecepatan normal B2-C1.',
+    level: 'B2-C1',
+    free: true,
+    url: 'https://www.dw.com/de/podcasts/s-103070',
+    type: 'podcast',
+  },
+  {
+    name: 'Deutsch Warum Nicht (DW)',
+    desc: 'Serial radio klasik A1-B1. Cerita seru belajar bahasa sambil mengikuti petualangan.',
+    level: 'A1-B1',
+    free: true,
+    url: 'https://www.dw.com/de/deutsch-warum-nicht/s-2119',
+    type: 'podcast',
+  },
+];
+
+export const GRAMMAR_TIPS = [
+  {
+    title: 'Artikel: der, die, das',
+    content: 'Setiap kata benda dalam bahasa Jerman memiliki artikel. der (maskulin), die (feminin), das (netral). Contoh: der Mann, die Frau, das Kind. Trik: pelajari artikel bersama kata bendanya dari awal!',
+    level: 'A1',
+  },
+  {
+    title: 'Konjugasi sein & haben',
+    content: 'sein: ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind. haben: ich habe, du hast, er/sie/es hat, wir haben, ihr habt, sie/Sie haben.',
+    level: 'A1',
+  },
+  {
+    title: 'Kasus Nominativ & Akkusativ',
+    content: 'Nominativ = subjek kalimat. Akkusativ = objek langsung. der→den (mask. akk), die→die (fem), das→das (neut). Contoh: Der Mann kauft den Apfel.',
+    level: 'A2',
+  },
+  {
+    title: 'Trennbare Verben (Kata Kerja Terpisah)',
+    content: 'Kata kerja seperti aufstehen, einkaufen terpisah di kalimat utama: Ich stehe um 7 Uhr auf. Ich kaufe im Supermarkt ein. Di kalimat anak (Nebensatz) tidak terpisah.',
+    level: 'A2',
+  },
+  {
+    title: 'Perfekt (Masa Lampau)',
+    content: 'Bentuk lampau percakapan: haben/sein + Partizip II. Contoh: Ich habe gegessen (makan), Ich bin gegangen (pergi). Kata kerja gerak umumnya pakai sein.',
+    level: 'A2',
+  },
+  {
+    title: 'Konjunktionen: weil & dass',
+    content: 'weil (karena) dan dass (bahwa) membuat kata kerja pindah ke akhir kalimat. Contoh: Ich lerne Deutsch, weil es interessant ist. Ich weiß, dass er kommt.',
+    level: 'B1',
+  },
+  {
+    title: 'Relativsatz (Kalimat Relatif)',
+    content: 'Mendeskripsikan kata benda dengan detail. Artikel berubah sesuai kasus: Das ist der Mann, der Deutsch spricht. Das ist das Buch, das ich lese.',
+    level: 'B1',
+  },
+  {
+    title: 'Konjunktiv II',
+    content: 'Untuk hipotesis, sopan santun, dan angan-angan. würde + Infinitiv atau bentuk khusus: hätte, wäre, könnte, müsste. Contoh: Ich würde gern reisen. Wenn ich Zeit hätte...',
+    level: 'B1',
+  },
+  {
+    title: 'Passiv (Kalimat Pasif)',
+    content: 'Dibentuk dengan werden + Partizip II. Contoh: Das Buch wird gelesen. Der Kuchen wurde gebacken. Untuk menyebutkan pelaku pakai "von": Das Buch wird von ihm gelesen.',
+    level: 'B2',
+  },
+  {
+    title: 'Nominalisierung (Nominalisasi)',
+    content: 'Mengubah kata kerja/sifat menjadi kata benda. singen → das Singen, schön → das Schöne, arbeiten → das Arbeiten. Sangat umum dalam bahasa formal dan tulisan akademis.',
+    level: 'B2',
+  },
+  {
+    title: 'Erweiterte Partizipialattribute',
+    content: 'Frasa partisip yang diperluas sebelum kata benda. Contoh: der gestern angekommene Zug (= der Zug, der gestern angekommen ist). Khas dalam teks tulis formal.',
+    level: 'B2',
+  },
+  {
+    title: 'Konjunktiv I (Indirekte Rede)',
+    content: 'Untuk melaporkan ucapan orang lain. er sagt, er sei krank (= er sagt, dass er krank ist). Digunakan dalam berita dan laporan formal.',
+    level: 'B2',
+  },
+];
