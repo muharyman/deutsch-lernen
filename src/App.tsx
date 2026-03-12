@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Level } from './types';
 import { getWeeks, getDailyPlans, getFlashcardSets, getDialogs } from './data';
 import { useTracker } from './hooks/useTracker';
@@ -23,7 +23,10 @@ const TABS = [
 ];
 
 const LEVEL_KEY = 'german-level-v1';
-const GEMINI_KEY = 'german-gemini-key-v1';
+const THEME_KEY = 'german-theme-v1';
+const DEFAULT_GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY?.trim() ?? '';
+
+type Theme = 'dark' | 'light';
 
 function loadLevel(): Level {
   const saved = localStorage.getItem(LEVEL_KEY);
@@ -31,10 +34,16 @@ function loadLevel(): Level {
   return 'A1';
 }
 
+function loadTheme(): Theme {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === 'dark' || saved === 'light') return saved;
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
 export default function App() {
   const [level, setLevel] = useState<Level>(loadLevel);
   const [tab, setTab] = useState('daily-word');
-  const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem(GEMINI_KEY) ?? '');
+  const [theme, setTheme] = useState<Theme>(loadTheme);
   const [showSettings, setShowSettings] = useState(false);
 
   const weeks = getWeeks(level);
@@ -49,11 +58,10 @@ export default function App() {
     localStorage.setItem(LEVEL_KEY, l);
   };
 
-  const handleGeminiKey = (key: string) => {
-    setGeminiKey(key);
-    if (key) localStorage.setItem(GEMINI_KEY, key);
-    else localStorage.removeItem(GEMINI_KEY);
-  };
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
   return (
     <div className="app-container">
@@ -74,18 +82,29 @@ export default function App() {
 
       {showSettings && (
         <div className="card settings-panel animate-fade">
-          <label className="settings-label">
-            Gemini API Key (opsional, untuk kata harian AI):
-          </label>
-          <input
-            type="password"
-            value={geminiKey}
-            onChange={e => handleGeminiKey(e.target.value)}
-            placeholder="Masukkan API key Gemini..."
-            className="settings-input"
-          />
+          <label className="settings-label">Tema aplikasi:</label>
+          <div className="theme-selector">
+            <button
+              className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => setTheme('dark')}
+            >
+              Dark
+            </button>
+            <button
+              className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => setTheme('light')}
+            >
+              Light
+            </button>
+          </div>
+          <label className="settings-label">Gemini API Key:</label>
           <p className="settings-hint">
-            Tanpa API key, kata harian akan diambil dari koleksi statis.
+            {DEFAULT_GEMINI_KEY
+              ? 'Terdeteksi dari .env dan siap dipakai untuk kata harian AI.'
+              : 'Belum terdeteksi. Tambahkan VITE_GEMINI_KEY di file .env untuk mengaktifkan kata harian AI.'}
+          </p>
+          <p className="settings-hint">
+            Jika key tidak tersedia, kata harian akan diambil dari koleksi statis.
           </p>
         </div>
       )}
@@ -94,7 +113,7 @@ export default function App() {
 
       <main className="app-content">
         {tab === 'daily-word' && (
-          <DailyWordTab level={level} geminiApiKey={geminiKey || undefined} />
+          <DailyWordTab level={level} geminiApiKey={DEFAULT_GEMINI_KEY || undefined} />
         )}
         {tab === 'tracker' && (
           <TrackerTab

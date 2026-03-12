@@ -23,6 +23,27 @@
   --transition: 0.2s ease;
 }
 
+:root[data-theme='light'] {
+  --bg: #f4efe4;
+  --bg2: #fffaf0;
+  --bg3: #efe5d2;
+  --primary: #28536b;
+  --primary-light: #3d6f8c;
+  --accent: #c8553d;
+  --accent-hover: #a5442f;
+  --gold: #b7791f;
+  --gold-light: #cf8f30;
+  --text: #1f2933;
+  --text-muted: #52606d;
+  --text-dim: #7b8794;
+  --border: #d9cdb8;
+  --border-light: #c3b79f;
+  --success: #2f855a;
+  --warning: #c05621;
+  --shadow: 0 10px 30px rgba(58, 46, 24, 0.12);
+  --shadow-sm: 0 4px 12px rgba(58, 46, 24, 0.08);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -41,6 +62,7 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
 }
 
 #root {
@@ -268,6 +290,32 @@ input:focus, textarea:focus, select:focus {
 
 .settings-panel {
   margin-bottom: 0.75rem;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.theme-btn {
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.theme-btn.active {
+  background: var(--primary);
+  border-color: var(--primary-light);
+  color: #fff;
+}
+
+.theme-btn:hover:not(.active) {
+  background: var(--bg3);
+  color: var(--text);
 }
 
 .settings-label {
