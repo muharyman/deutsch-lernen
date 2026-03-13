@@ -66,9 +66,29 @@ body {
 }
 
 #root {
+  max-width: 430px;
   min-height: 100vh;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* On desktop, add subtle phone-like frame */
+@media (min-width: 500px) {
+  body {
+    background: #080812;
+  }
+
+  :root[data-theme='light'] body {
+    background: #d5cfc4;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: var(--bg);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  }
 }
 
 a { color: var(--gold); text-decoration: none; }
@@ -112,8 +132,7 @@ input:focus, textarea:focus, select:focus {
 
 /* ── Layout ── */
 .app-container {
-  max-width: 860px;
-  margin: 0 auto;
+  width: 100%;
   padding: 0.75rem;
   min-height: 100vh;
   display: flex;
@@ -990,11 +1009,7 @@ input:focus, textarea:focus, select:focus {
   transform: rotateY(180deg);
 }
 
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  html { font-size: 15px; }
-  .card { padding: 0.75rem; }
-  .fc-list-grid { grid-template-columns: 1fr; }
-  .header-title { font-size: 1.1rem; }
-  .tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
-}
+/* ── Always mobile layout ── */
+.fc-list-grid { grid-template-columns: 1fr; }
+.header-title { font-size: 1.1rem; }
+.tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
