@@ -32,6 +32,21 @@ export const WORD_POOL: DailyWord[] = [
   { word: 'Milch', article: 'die', meaning_id: 'susu', example_de: 'Kinder trinken gern Milch.', example_id: 'Anak-anak suka minum susu.', level: 'A1' },
   { word: 'Zug', article: 'der', meaning_id: 'kereta api', example_de: 'Der Zug kommt um 9 Uhr an.', example_id: 'Kereta tiba pukul 9.', level: 'A1' },
   { word: 'Stadt', article: 'die', meaning_id: 'kota', example_de: 'Berlin ist eine schöne Stadt.', example_id: 'Berlin adalah kota yang indah.', level: 'A1' },
+  // A1 – Kleidung (clothing)
+  { word: 'Hemd', article: 'das', meaning_id: 'kemeja', example_de: 'Er trägt ein weißes Hemd zur Arbeit.', example_id: 'Dia memakai kemeja putih ke tempat kerja.', level: 'A1' },
+  { word: 'Hose', article: 'die', meaning_id: 'celana', example_de: 'Diese Hose ist zu groß für mich.', example_id: 'Celana ini terlalu besar untukku.', level: 'A1' },
+  { word: 'Kleid', article: 'das', meaning_id: 'gaun / dress', example_de: 'Sie trägt ein rotes Kleid zur Party.', example_id: 'Dia memakai gaun merah ke pesta.', level: 'A1' },
+  // A1 – Verkehr (transport)
+  { word: 'Bus', article: 'der', meaning_id: 'bus', example_de: 'Ich fahre mit dem Bus zur Schule.', example_id: 'Saya naik bus ke sekolah.', level: 'A1' },
+  { word: 'Fahrrad', article: 'das', meaning_id: 'sepeda', example_de: 'Im Sommer fahre ich gern Fahrrad.', example_id: 'Di musim panas saya suka bersepeda.', level: 'A1' },
+  // A1 – Familie (family)
+  { word: 'Bruder', article: 'der', meaning_id: 'kakak/adik laki-laki', example_de: 'Mein Bruder ist zwei Jahre älter als ich.', example_id: 'Kakak laki-lakiku dua tahun lebih tua dariku.', level: 'A1' },
+  { word: 'Schwester', article: 'die', meaning_id: 'kakak/adik perempuan', example_de: 'Meine Schwester wohnt in Hamburg.', example_id: 'Adik perempuanku tinggal di Hamburg.', level: 'A1' },
+  { word: 'Großmutter', article: 'die', meaning_id: 'nenek', example_de: 'Meine Großmutter macht den besten Kuchen.', example_id: 'Nenekku membuat kue terbaik.', level: 'A1' },
+  // A1 – Hobbys (hobbies)
+  { word: 'schwimmen', meaning_id: 'berenang', example_de: 'Im Sommer schwimme ich im See.', example_id: 'Di musim panas saya berenang di danau.', level: 'A1' },
+  { word: 'tanzen', meaning_id: 'menari / berdansa', example_de: 'Sie tanzt jeden Freitag in der Tanzschule.', example_id: 'Dia berdansa setiap Jumat di sekolah tari.', level: 'A1' },
+  { word: 'wandern', meaning_id: 'mendaki / hiking', example_de: 'Am Wochenende wandern wir in den Bergen.', example_id: 'Akhir pekan kami mendaki di pegunungan.', level: 'A1' },
 
   // --- A2 ---
   { word: 'aufstehen', meaning_id: 'bangun tidur', example_de: 'Ich stehe jeden Morgen um 7 Uhr auf.', example_id: 'Saya bangun tidur setiap pagi pukul 7.', level: 'A2' },
@@ -65,6 +80,15 @@ export const WORD_POOL: DailyWord[] = [
   { word: 'Post', article: 'die', meaning_id: 'kantor pos / surat', example_de: 'Ich muss zur Post gehen.', example_id: 'Saya harus pergi ke kantor pos.', level: 'A2' },
   { word: 'Apotheke', article: 'die', meaning_id: 'apotek', example_de: 'Die Apotheke ist gleich um die Ecke.', example_id: 'Apoteknya tepat di tikungan.', level: 'A2' },
   { word: 'Fieber', article: 'das', meaning_id: 'demam', example_de: 'Ich habe hohes Fieber.', example_id: 'Saya demam tinggi.', level: 'A2' },
+  // A2 – daily life, travel, work
+  { word: 'Rucksack', article: 'der', meaning_id: 'tas ransel', example_de: 'Mein Rucksack ist sehr schwer.', example_id: 'Tas ranselku sangat berat.', level: 'A2' },
+  { word: 'Flughafen', article: 'der', meaning_id: 'bandara', example_de: 'Wir fahren morgen zum Flughafen.', example_id: 'Besok kami pergi ke bandara.', level: 'A2' },
+  { word: 'Koffer', article: 'der', meaning_id: 'koper', example_de: 'Ich packe meinen Koffer für die Reise.', example_id: 'Saya mengemas koper untuk perjalanan.', level: 'A2' },
+  { word: 'Besprechung', article: 'die', meaning_id: 'rapat / pertemuan', example_de: 'Ich habe um 10 Uhr eine wichtige Besprechung.', example_id: 'Saya ada rapat penting pukul 10.', level: 'A2' },
+  { word: 'Büro', article: 'das', meaning_id: 'kantor', example_de: 'Ich arbeite im dritten Stock im Büro.', example_id: 'Saya bekerja di kantor di lantai tiga.', level: 'A2' },
+  { word: 'Rechnung', article: 'die', meaning_id: 'tagihan / nota', example_de: 'Kannst du bitte die Rechnung bringen?', example_id: 'Bisakah kamu membawakan tagihannya?', level: 'A2' },
+  { word: 'Rabatt', article: 'der', meaning_id: 'diskon / potongan harga', example_de: 'In diesem Geschäft gibt es heute 20 % Rabatt.', example_id: 'Di toko ini hari ini ada diskon 20%.', level: 'A2' },
+  { word: 'Größe', article: 'die', meaning_id: 'ukuran', example_de: 'Welche Größe haben Sie?', example_id: 'Berapa ukuran Anda?', level: 'A2' },
 
   // --- B1 ---
   { word: 'obwohl', meaning_id: 'meskipun / walaupun', example_de: 'Obwohl es regnet, gehe ich spazieren.', example_id: 'Meskipun hujan, saya tetap jalan-jalan.', level: 'B1' },
@@ -97,6 +121,13 @@ export const WORD_POOL: DailyWord[] = [
   { word: 'falls', meaning_id: 'jika / seandainya', example_de: 'Falls es regnet, bleiben wir zu Hause.', example_id: 'Jika hujan, kami tinggal di rumah.', level: 'B1' },
   { word: 'sofern', meaning_id: 'asalkan / selama', example_de: 'Sofern du Zeit hast, kannst du kommen.', example_id: 'Asalkan kamu punya waktu, kamu bisa datang.', level: 'B1' },
   { word: 'Praktikum', article: 'das', meaning_id: 'magang', example_de: 'Ich mache ein Praktikum bei einer Bank.', example_id: 'Saya magang di sebuah bank.', level: 'B1' },
+  // B1 – abstract concepts, connectors, society
+  { word: 'Zusammenhang', article: 'der', meaning_id: 'hubungan / konteks', example_de: 'Man muss den Zusammenhang verstehen.', example_id: 'Kita harus memahami konteksnya.', level: 'B1' },
+  { word: 'Einstellung', article: 'die', meaning_id: 'sikap / pandangan', example_de: 'Seine Einstellung zur Arbeit ist sehr positiv.', example_id: 'Sikapnya terhadap pekerjaan sangat positif.', level: 'B1' },
+  { word: 'Gleichgewicht', article: 'das', meaning_id: 'keseimbangan', example_de: 'Ein gutes Gleichgewicht zwischen Arbeit und Freizeit ist wichtig.', example_id: 'Keseimbangan yang baik antara pekerjaan dan waktu luang itu penting.', level: 'B1' },
+  { word: 'Vorurteil', article: 'das', meaning_id: 'prasangka / stereotip', example_de: 'Vorurteile sind oft ungerechtfertigt.', example_id: 'Prasangka seringkali tidak berdasar.', level: 'B1' },
+  { word: 'daher', meaning_id: 'oleh karena itu / dari situ', example_de: 'Es gibt keine Plätze mehr, daher können wir nicht kommen.', example_id: 'Tidak ada tempat lagi, oleh karena itu kami tidak bisa datang.', level: 'B1' },
+  { word: 'jedoch', meaning_id: 'namun / tetapi', example_de: 'Das Projekt ist interessant, jedoch sehr aufwendig.', example_id: 'Proyek itu menarik, namun sangat memakan banyak usaha.', level: 'B1' },
 
   // --- B2 ---
   { word: 'Leitartikel', article: 'der', meaning_id: 'editorial / tajuk rencana', example_de: 'Der Leitartikel kritisiert die Regierungspolitik.', example_id: 'Editorial itu mengkritik kebijakan pemerintah.', level: 'B2' },
@@ -129,4 +160,11 @@ export const WORD_POOL: DailyWord[] = [
   { word: 'Widerspruch', article: 'der', meaning_id: 'kontradiksi / sanggahan', example_de: 'Das ist ein klarer Widerspruch.', example_id: 'Itu adalah kontradiksi yang jelas.', level: 'B2' },
   { word: 'Einfluss', article: 'der', meaning_id: 'pengaruh', example_de: 'Medien haben großen Einfluss auf die Gesellschaft.', example_id: 'Media memiliki pengaruh besar terhadap masyarakat.', level: 'B2' },
   { word: 'Auswirkung', article: 'die', meaning_id: 'dampak / pengaruh', example_de: 'Die Auswirkungen des Klimawandels sind spürbar.', example_id: 'Dampak perubahan iklim sudah terasa.', level: 'B2' },
+  // B2 – academic, professional vocabulary
+  { word: 'Schlussfolgerung', article: 'die', meaning_id: 'kesimpulan / inferensi', example_de: 'Die Schlussfolgerung des Berichts ist eindeutig.', example_id: 'Kesimpulan laporan itu jelas.', level: 'B2' },
+  { word: 'Rahmenbedingung', article: 'die', meaning_id: 'kondisi kerangka / syarat dasar', example_de: 'Die rechtlichen Rahmenbedingungen müssen beachtet werden.', example_id: 'Kondisi kerangka hukum harus diperhatikan.', level: 'B2' },
+  { word: 'Kernkompetenz', article: 'die', meaning_id: 'kompetensi inti', example_de: 'Kreativität ist eine unserer Kernkompetenzen.', example_id: 'Kreativitas adalah salah satu kompetensi inti kami.', level: 'B2' },
+  { word: 'Umsetzung', article: 'die', meaning_id: 'implementasi / pelaksanaan', example_de: 'Die Umsetzung des Plans braucht Ressourcen.', example_id: 'Implementasi rencana tersebut membutuhkan sumber daya.', level: 'B2' },
+  { word: 'berücksichtigen', meaning_id: 'mempertimbangkan / memperhatikan', example_de: 'Dabei muss man alle Faktoren berücksichtigen.', example_id: 'Dalam hal ini semua faktor harus dipertimbangkan.', level: 'B2' },
+  { word: 'Stellungnahme', article: 'die', meaning_id: 'pernyataan sikap / opini tertulis', example_de: 'Er hat eine offizielle Stellungnahme abgegeben.', example_id: 'Dia memberikan pernyataan sikap resmi.', level: 'B2' },
 ];
