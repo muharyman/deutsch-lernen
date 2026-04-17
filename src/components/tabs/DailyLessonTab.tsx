@@ -4,7 +4,6 @@ import type { DailyLessonPayload, PracticeQuestion } from '../../types';
 interface DailyLessonTabProps {
   lesson: DailyLessonPayload | null;
   loading: boolean;
-  source: 'cache' | 'fresh_gemini' | 'fallback';
   error: string | null;
   todayDone: boolean;
   onToggleDone: () => void;
@@ -108,7 +107,6 @@ function PracticeCard({
 export default function DailyLessonTab({
   lesson,
   loading,
-  source,
   error,
   todayDone,
   onToggleDone,
@@ -141,17 +139,11 @@ export default function DailyLessonTab({
     <section className="animate-fade">
       <article className="card lesson-summary">
         <div className="lesson-summary-top">
-          <div>
-            <div className="section-eyebrow">Tema Hari Ini</div>
-            <h2 className="lesson-theme">{lesson.theme}</h2>
+          <div className="lesson-summary-line">
+            <span className="section-eyebrow">Tema hari ini</span>
           </div>
-          <span className={`source-pill ${source === 'fallback' ? 'static' : 'gemini'}`}>
-            {source === 'fresh_gemini'
-              ? 'Fresh Gemini'
-              : source === 'cache'
-                ? 'Shared cache'
-                : 'Fallback lokal'}
-          </span>
+          <h2 className="lesson-theme">{lesson.theme}</h2>
+
         </div>
         <p className="lesson-summary-copy">
           Fokus ke satu percakapan dulu, lalu ulangi pola dan kosakatanya sampai lebih natural.
@@ -193,11 +185,6 @@ export default function DailyLessonTab({
 
       {activeSection === 'conversations' ? (
         <section className="lesson-section" aria-labelledby="conversation-heading">
-          <div className="section-heading-row">
-            <h2 id="conversation-heading" className="section-title">Latihan Percakapan</h2>
-            <span className="section-meta">Satu percakapan per waktu agar tidak terlalu panjang</span>
-          </div>
-
           <div className="card conversation-tabs-card">
             <div className="conversation-tablist" role="tablist" aria-label="Pilih percakapan">
               {lesson.conversations.map((_, index) => (
@@ -209,7 +196,7 @@ export default function DailyLessonTab({
                   className={`conversation-tab-btn ${activeConversationIndex === index ? 'active' : ''}`}
                   onClick={() => setActiveConversationIndex(index)}
                 >
-                  {`Percakapan ${index + 1}`}
+                  {`${index + 1}`}
                 </button>
               ))}
             </div>
@@ -220,10 +207,8 @@ export default function DailyLessonTab({
             className="card conversation-card"
           >
             <div className="conversation-header">
-              <div>
+              <div className="conversation-header-line">
                 <div className="conversation-kicker">{`Percakapan ${activeConversationIndex + 1}`}</div>
-                <h3 className="conversation-title">{activeConversation.title}</h3>
-                <p className="conversation-situation">{activeConversation.situation}</p>
               </div>
               <button
                 type="button"
@@ -240,6 +225,8 @@ export default function DailyLessonTab({
                   : 'Tampilkan terjemahan'}
               </button>
             </div>
+            <h3 className="conversation-title">{activeConversation.title}</h3>
+            <p className="conversation-situation">{activeConversation.situation}</p>
 
             <div className="dialog-chat">
               {activeConversation.lines.map((line, lineIndex) => {
@@ -247,7 +234,9 @@ export default function DailyLessonTab({
                 return (
                   <div
                     key={`${activeConversation.title}-${lineIndex}`}
-                    className={`dialog-line ${isPrimarySpeaker ? 'other' : 'user'}`}
+                    className={`dialog-line ${isPrimarySpeaker ? 'other' : 'user'} ${
+                      showTranslation[activeConversationIndex] ? 'with-translation' : ''
+                    }`}
                   >
                     <div className="dialog-role">{line.role}</div>
                     <div className={`dialog-bubble ${isPrimarySpeaker ? 'other' : 'user'}`}>

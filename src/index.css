@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 :root {
   --bg: #f4ead6;
   --bg-soft: #fbf5ea;
@@ -20,7 +22,10 @@
   --shadow-soft: 0 10px 24px rgba(87, 53, 22, 0.06);
   --radius: 22px;
   --radius-sm: 16px;
+  --radius-xs: 12px;
   --transition: 0.2s ease;
+  --font-sans: 'Manrope', 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
 }
 
 :root[data-theme='dark'] {
@@ -63,9 +68,11 @@ body {
     radial-gradient(circle at top, rgba(255, 219, 162, 0.24), transparent 34%),
     linear-gradient(180deg, var(--bg-soft), var(--bg));
   color: var(--ink);
-  font-family: Georgia, 'Times New Roman', serif;
-  line-height: 1.65;
+  font-family: var(--font-sans);
+  line-height: 1.58;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -105,12 +112,21 @@ select {
 button {
   border: 0;
   cursor: pointer;
+  font-family: var(--font-sans);
   transition:
     transform var(--transition),
     background-color var(--transition),
     border-color var(--transition),
     color var(--transition),
     box-shadow var(--transition);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button:focus-visible,
@@ -144,7 +160,7 @@ select {
 
 .app-container {
   min-height: 100vh;
-  padding: 1rem;
+  padding: 0.8rem;
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.08), transparent 30%),
     linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.03));
@@ -162,8 +178,8 @@ select {
 }
 
 .card {
-  margin-bottom: 1rem;
-  padding: 1.15rem;
+  margin-bottom: 0.8rem;
+  padding: 1rem;
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--line);
@@ -180,8 +196,8 @@ select {
 }
 
 .app-header {
-  margin-bottom: 1rem;
-  padding: 1.25rem;
+  margin-bottom: 0.8rem;
+  padding: 1.15rem;
   border-radius: 28px;
   color: #fff8f0;
   background:
@@ -197,16 +213,26 @@ select {
   align-items: flex-start;
 }
 
+.header-side {
+  display: grid;
+  justify-items: end;
+  gap: 0.75rem;
+}
+
 .header-subtitle {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  opacity: 0.84;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  font-weight: 800;
+  opacity: 0.8;
 }
 
 .header-title {
-  margin: 0.3rem 0 0;
-  font-size: 1.95rem;
-  line-height: 1.05;
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-size: 2.15rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
 }
 
 .header-date {
@@ -219,9 +245,27 @@ select {
   text-align: right;
 }
 
+.header-theme-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 248, 240, 0.22);
+  background: rgba(255, 248, 240, 0.12);
+  color: #fff8f0;
+  display: inline-grid;
+  place-items: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.header-theme-btn:hover {
+  background: rgba(255, 248, 240, 0.2);
+}
+
 .header-pct {
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
 .header-days {
@@ -254,32 +298,38 @@ select {
 
 .tab-bar {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.55rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  padding: 0.4rem;
+  border-radius: 22px;
+  background: rgba(255, 250, 240, 0.52);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(12px);
 }
 
 .tab-btn {
   min-height: 52px;
   padding: 0.75rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255, 250, 240, 0.65);
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ink-soft);
-  font-size: 0.9rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 .tab-btn.active {
-  background: var(--brand);
-  color: #fffaf3;
-  border-color: transparent;
-  box-shadow: 0 12px 26px rgba(154, 52, 18, 0.22);
+  background: var(--surface-strong);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: 0 10px 24px rgba(87, 53, 22, 0.08);
 }
 
 .tab-btn:hover:not(.active) {
-  background: var(--surface-strong);
+  background: rgba(255, 255, 255, 0.34);
   color: var(--ink);
 }
 
@@ -301,8 +351,11 @@ select {
 
 .section-title {
   margin: 0;
-  font-size: 1.22rem;
-  line-height: 1.25;
+  font-family: var(--font-display);
+  font-size: 1.34rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .section-meta {
@@ -317,14 +370,40 @@ select {
 }
 
 .lesson-summary-top {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.lesson-summary-line,
+.conversation-header-line {
   display: flex;
-  justify-content: space-between;
-  gap: 0.9rem;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.summary-separator {
+  color: var(--ink-dim);
+  font-weight: 700;
+}
+
+.lesson-topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+}
+
+.lesson-topic-list span:not(:last-child)::after {
+  content: '•';
+  margin-left: 0.45rem;
+  color: var(--ink-dim);
 }
 
 .lesson-theme {
-  margin: 0.3rem 0 0;
+  margin: 0;
   font-size: 1.5rem;
   line-height: 1.2;
 }
@@ -357,9 +436,10 @@ select {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.38rem 0.78rem;
-  font-size: 0.74rem;
-  font-weight: 700;
+  padding: 0.4rem 0.78rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
 }
 
 .source-pill.gemini,
@@ -387,30 +467,34 @@ select {
 .resource-link,
 .theme-btn {
   min-height: 50px;
-  padding: 0.8rem 1.1rem;
-  border-radius: 999px;
-  font-weight: 700;
+  padding: 0.82rem 1.12rem;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
+  letter-spacing: -0.01em;
 }
 
 .primary-btn {
-  margin-top: 1rem;
-  background: var(--brand);
+  margin-top: 0.8rem;
+  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
   color: #fffaf3;
-  box-shadow: 0 12px 26px rgba(154, 52, 18, 0.2);
+  box-shadow: 0 14px 28px rgba(154, 52, 18, 0.2);
 }
 
 .primary-btn.done {
-  background: var(--accent);
+  background: linear-gradient(135deg, #1f6f5f, #174f44);
 }
 
 .secondary-btn,
 .theme-btn {
-  background: var(--panel);
+  background: rgba(255, 255, 255, 0.4);
   color: var(--ink);
+  border-color: var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .secondary-btn:disabled {
@@ -419,37 +503,40 @@ select {
 }
 
 .lesson-section {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .lesson-switcher {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem;
-  padding: 0.55rem;
+  gap: 0.45rem;
+  padding: 0.45rem;
+  background: rgba(255, 250, 240, 0.5);
 }
 
 .lesson-switch-btn,
 .conversation-tab-btn {
   min-height: 50px;
-  border-radius: 999px;
-  background: var(--surface-strong);
+  border-radius: 14px;
+  background: transparent;
   color: var(--ink-soft);
-  border: 1px solid var(--line);
-  font-weight: 700;
+  border: 1px solid transparent;
+  font-weight: 800;
   padding: 0.75rem 1rem;
+  letter-spacing: -0.01em;
 }
 
 .lesson-switch-btn.active,
 .conversation-tab-btn.active,
 .theme-btn.active {
-  background: var(--brand);
-  color: #fffaf3;
-  border-color: transparent;
+  background: var(--surface-strong);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: var(--shadow-soft);
 }
 
 .conversation-tabs-card {
-  padding: 0.75rem;
+  padding: 0.65rem;
 }
 
 .conversation-tablist {
@@ -466,8 +553,8 @@ select {
   display: flex;
   justify-content: space-between;
   gap: 0.9rem;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
 }
 
 .conversation-kicker {
@@ -477,19 +564,29 @@ select {
 }
 
 .conversation-title {
-  margin: 0.2rem 0 0.35rem;
-  font-size: 1.35rem;
-  line-height: 1.25;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.48rem;
+  line-height: 1.16;
+}
+
+.conversation-situation {
+  margin: 0.25rem 0 0.8rem;
 }
 
 .dialog-chat {
   display: grid;
-  gap: 0.9rem;
+  gap: 0.75rem;
 }
 
 .dialog-line {
   display: flex;
   flex-direction: column;
+}
+
+.dialog-line.with-translation {
+  display: grid;
+  gap: 0.35rem;
 }
 
 .dialog-line.user {
@@ -508,16 +605,16 @@ select {
 
 .dialog-bubble {
   max-width: 92%;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 0.95rem 1rem;
 }
 
 .dialog-bubble.other {
-  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 86%, white);
 }
 
 .dialog-bubble.user {
-  background: var(--brand-soft);
+  background: color-mix(in srgb, var(--brand-soft) 82%, white);
 }
 
 .dialog-translation {
@@ -529,12 +626,12 @@ select {
 
 .detail-grid {
   display: grid;
-  gap: 0.9rem;
-  margin-top: 1.1rem;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .detail-panel {
-  padding: 1rem;
+  padding: 0.9rem;
   border-radius: var(--radius-sm);
   background: var(--surface-strong);
   border: 1px solid var(--line);
@@ -580,12 +677,12 @@ select {
 }
 
 .practice-panel {
-  margin-top: 1rem;
+  margin-top: 0.8rem;
 }
 
 .practice-card + .practice-card {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
   border-top: 1px solid var(--line);
 }
 
@@ -601,12 +698,13 @@ select {
 
 .practice-option {
   min-height: 52px;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.36);
   color: var(--ink);
   padding: 0.85rem 1rem;
   text-align: left;
+  font-weight: 600;
 }
 
 .practice-option.selected {
@@ -652,7 +750,7 @@ select {
 
 .word-grid {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.65rem;
 }
 
 .word-card {
@@ -662,8 +760,8 @@ select {
 
 .word-toggle {
   width: 100%;
-  min-height: 84px;
-  padding: 1rem 1.05rem;
+  min-height: 76px;
+  padding: 0.9rem 1rem;
   background: none;
   display: flex;
   justify-content: space-between;
@@ -676,7 +774,9 @@ select {
   display: flex;
   gap: 0.4rem;
   align-items: center;
-  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1.05;
 }
 
 .daily-word-article {
@@ -701,7 +801,7 @@ select {
 }
 
 .word-body {
-  padding: 0 1.05rem 1.05rem;
+  padding: 0 1rem 1rem;
 }
 
 .daily-word-example {
@@ -757,7 +857,7 @@ select {
   min-height: 84px;
   padding: 0.8rem 0.4rem;
   border-radius: 18px;
-  background: var(--surface-strong);
+  background: rgba(255, 255, 255, 0.34);
   border: 1px solid var(--line);
   color: var(--ink);
 }
@@ -789,8 +889,10 @@ select {
   display: block;
   margin-bottom: 0.35rem;
   color: var(--ink-soft);
-  font-size: 0.94rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .settings-actions,
@@ -845,7 +947,7 @@ select {
 }
 
 .resource-link {
-  background: var(--brand);
+  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
   color: #fffaf3 !important;
   text-decoration: none !important;
   align-self: center;
@@ -862,7 +964,7 @@ select {
 }
 
 .font-semibold {
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .animate-fade {
@@ -897,6 +999,10 @@ select {
     font-size: 0.88rem;
   }
 
+  .conversation-tablist {
+    grid-template-columns: 1fr;
+  }
+
   .conversation-header,
   .lesson-summary-top,
   .header-top,
@@ -909,6 +1015,10 @@ select {
   .header-stats,
   .header-meta {
     text-align: left;
+  }
+
+  .header-side {
+    justify-items: start;
   }
 
   .header-meta {

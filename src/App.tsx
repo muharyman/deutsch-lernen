@@ -6,13 +6,11 @@ import TabBar from './components/ui/TabBar';
 import DailyLessonTab from './components/tabs/DailyLessonTab';
 import TrackerTab from './components/tabs/TrackerTab';
 import ResourceTab from './components/tabs/ResourceTab';
-import SettingsTab from './components/tabs/SettingsTab';
 
 const TABS = [
   { id: 'today', label: 'Hari Ini' },
   { id: 'tracker', label: 'Tracker' },
   { id: 'resources', label: 'Materi' },
-  { id: 'settings', label: 'Pengaturan' },
 ];
 
 const THEME_KEY = 'german-theme-v1';
@@ -28,7 +26,7 @@ function loadTheme(): Theme {
 export default function App() {
   const [tab, setTab] = useState('today');
   const [theme, setTheme] = useState<Theme>(loadTheme);
-  const { lesson, loading, source, error, activeDate } = useDailyLesson();
+  const { lesson, loading, error, activeDate } = useDailyLesson();
   const {
     tracker,
     recentDates,
@@ -59,6 +57,8 @@ export default function App() {
         windowDays={windowDays}
         completedDays={completedDays}
         streak={streak}
+        theme={theme}
+        onToggleTheme={() => setTheme(current => (current === 'dark' ? 'light' : 'dark'))}
       />
 
       <TabBar tabs={TABS} active={tab} onChange={setTab} />
@@ -68,7 +68,6 @@ export default function App() {
           <DailyLessonTab
             lesson={lesson}
             loading={loading}
-            source={source}
             error={error}
             todayDone={todayDone}
             onToggleDone={() => setDayComplete(activeDate, !todayDone)}
@@ -86,10 +85,6 @@ export default function App() {
         ) : null}
 
         {tab === 'resources' ? <ResourceTab /> : null}
-
-        {tab === 'settings' ? (
-          <SettingsTab theme={theme} onThemeChange={setTheme} />
-        ) : null}
       </main>
 
       <footer className="app-footer">

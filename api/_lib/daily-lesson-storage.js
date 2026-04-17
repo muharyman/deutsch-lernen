@@ -17,11 +17,11 @@ function createBlobStorage() {
   async function readJsonBlob(pathname) {
     try {
       const result = await get(pathname, { access: 'private' });
-      if (!result || result.statusCode === 404) {
+      if (!result || result.statusCode !== 200 || !result.stream) {
         return null;
       }
 
-      const raw = await result.blob.text();
+      const raw = await new Response(result.stream).text();
       return JSON.parse(raw);
     } catch (error) {
       if (error instanceof BlobNotFoundError) {
