@@ -44,7 +44,7 @@ export default function TrackerTab({
       <article className="card">
         <div className="section-heading-row">
           <h2 className="section-title">28 Hari Terakhir</h2>
-          <span className="section-meta">Tekan untuk toggle</span>
+          <span className="section-meta">Tekan untuk menandai</span>
         </div>
         <div className="tracker-calendar">
           {recentDates.map((date) => {

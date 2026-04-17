@@ -2,32 +2,39 @@ import { RESOURCES } from '../../data/resources';
 
 export default function ResourceTab() {
   return (
-    <div className="animate-fade">
-      <div className="card resource-section">
-        <div className="resource-section-title">Podcast, Video & Aplikasi</div>
-        {RESOURCES.map((r, i) => (
-          <div key={i} className="resource-item">
+    <section className="animate-fade">
+      <article className="card resource-section">
+        <div className="section-heading-row resource-heading-row">
+          <div>
+            <h2 className="section-title">Materi Tambahan</h2>
+            <p className="resource-desc">
+              Pilih sumber belajar yang ringan dipakai untuk melengkapi latihan harianmu.
+            </p>
+          </div>
+        </div>
+        {RESOURCES.map((resource, index) => (
+          <div key={index} className="resource-item">
             <div className="resource-info">
-              <div className="resource-name">{r.name}</div>
-              <div className="resource-desc">{r.desc}</div>
+              <div className="resource-name">{resource.name}</div>
+              <div className="resource-desc">{resource.desc}</div>
               <div className="resource-tags">
-                <span className="badge badge-a2">{r.level}</span>
-                <span className={`badge ${r.free ? 'badge-free' : 'badge-paid'}`}>
-                  {r.free ? 'Gratis' : 'Berbayar'}
+                <span className="badge badge-a2">{resource.level}</span>
+                <span className={`badge ${resource.free ? 'badge-free' : 'badge-paid'}`}>
+                  {resource.free ? 'Gratis' : 'Berbayar'}
                 </span>
               </div>
             </div>
             <a
-              href={r.url}
+              href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
               className="resource-link"
             >
-              Buka →
+              Buka
             </a>
           </div>
         ))}
-      </div>
-    </div>
+      </article>
+    </section>
   );
 }

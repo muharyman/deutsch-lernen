@@ -114,6 +114,7 @@ export default function DailyLessonTab({
   onToggleDone,
 }: DailyLessonTabProps) {
   const [activeSection, setActiveSection] = useState<'conversations' | 'words'>('conversations');
+  const [activeConversationIndex, setActiveConversationIndex] = useState(0);
   const [openWords, setOpenWords] = useState<Record<number, boolean>>({});
   const [showTranslation, setShowTranslation] = useState<Record<number, boolean>>({});
 
@@ -134,6 +135,8 @@ export default function DailyLessonTab({
     );
   }
 
+  const activeConversation = lesson.conversations[activeConversationIndex];
+
   return (
     <section className="animate-fade">
       <article className="card lesson-summary">
@@ -151,7 +154,7 @@ export default function DailyLessonTab({
           </span>
         </div>
         <p className="lesson-summary-copy">
-          Hari ini kamu dapat 3 conversation, penjelasan grammar, dan 3 kata baru untuk dipakai ulang.
+          Fokus ke satu percakapan dulu, lalu ulangi pola dan kosakatanya sampai lebih natural.
         </p>
         {error ? (
           <p className="daily-error" role="alert">
@@ -175,7 +178,7 @@ export default function DailyLessonTab({
           className={`lesson-switch-btn ${activeSection === 'conversations' ? 'active' : ''}`}
           onClick={() => setActiveSection('conversations')}
         >
-          Conversation
+          Percakapan
         </button>
         <button
           type="button"
@@ -191,102 +194,122 @@ export default function DailyLessonTab({
       {activeSection === 'conversations' ? (
         <section className="lesson-section" aria-labelledby="conversation-heading">
           <div className="section-heading-row">
-            <h2 id="conversation-heading" className="section-title">3 Conversation</h2>
-            <span className="section-meta">Latihan baca + grammar + latihan</span>
+            <h2 id="conversation-heading" className="section-title">Latihan Percakapan</h2>
+            <span className="section-meta">Satu percakapan per waktu agar tidak terlalu panjang</span>
           </div>
 
-          {lesson.conversations.map((conversation, index) => (
-            <article key={`${lesson.date}-conversation-${index}`} className="card conversation-card">
-              <div className="conversation-header">
-                <div>
-                  <div className="conversation-kicker">Conversation {index + 1}</div>
-                  <h3 className="conversation-title">{conversation.title}</h3>
-                  <p className="conversation-situation">{conversation.situation}</p>
-                </div>
+          <div className="card conversation-tabs-card">
+            <div className="conversation-tablist" role="tablist" aria-label="Pilih percakapan">
+              {lesson.conversations.map((_, index) => (
                 <button
+                  key={`${lesson.date}-conversation-tab-${index}`}
                   type="button"
-                  className="secondary-btn"
-                  onClick={() =>
-                    setShowTranslation((prev) => ({
-                      ...prev,
-                      [index]: !prev[index],
-                    }))
-                  }
+                  role="tab"
+                  aria-selected={activeConversationIndex === index}
+                  className={`conversation-tab-btn ${activeConversationIndex === index ? 'active' : ''}`}
+                  onClick={() => setActiveConversationIndex(index)}
                 >
-                  {showTranslation[index] ? 'Sembunyikan terjemahan' : 'Tampilkan terjemahan'}
+                  {`Percakapan ${index + 1}`}
                 </button>
-              </div>
+              ))}
+            </div>
+          </div>
 
-              <div className="dialog-chat">
-                {conversation.lines.map((line, lineIndex) => {
-                  const isPrimarySpeaker = lineIndex % 2 === 0;
-                  return (
-                    <div
-                      key={`${conversation.title}-${lineIndex}`}
-                      className={`dialog-line ${isPrimarySpeaker ? 'other' : 'user'}`}
-                    >
-                      <div className="dialog-role">{line.role}</div>
-                      <div className={`dialog-bubble ${isPrimarySpeaker ? 'other' : 'user'}`}>
-                        {line.de}
-                      </div>
-                      {showTranslation[index] ? (
-                        <div className="dialog-translation">{line.id}</div>
-                      ) : null}
+          <article
+            key={`${lesson.date}-conversation-${activeConversationIndex}`}
+            className="card conversation-card"
+          >
+            <div className="conversation-header">
+              <div>
+                <div className="conversation-kicker">{`Percakapan ${activeConversationIndex + 1}`}</div>
+                <h3 className="conversation-title">{activeConversation.title}</h3>
+                <p className="conversation-situation">{activeConversation.situation}</p>
+              </div>
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={() =>
+                  setShowTranslation((prev) => ({
+                    ...prev,
+                    [activeConversationIndex]: !prev[activeConversationIndex],
+                  }))
+                }
+              >
+                {showTranslation[activeConversationIndex]
+                  ? 'Sembunyikan terjemahan'
+                  : 'Tampilkan terjemahan'}
+              </button>
+            </div>
+
+            <div className="dialog-chat">
+              {activeConversation.lines.map((line, lineIndex) => {
+                const isPrimarySpeaker = lineIndex % 2 === 0;
+                return (
+                  <div
+                    key={`${activeConversation.title}-${lineIndex}`}
+                    className={`dialog-line ${isPrimarySpeaker ? 'other' : 'user'}`}
+                  >
+                    <div className="dialog-role">{line.role}</div>
+                    <div className={`dialog-bubble ${isPrimarySpeaker ? 'other' : 'user'}`}>
+                      {line.de}
                     </div>
-                  );
-                })}
-              </div>
+                    {showTranslation[activeConversationIndex] ? (
+                      <div className="dialog-translation">{line.id}</div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
 
-              <div className="detail-grid">
-                <section className="detail-panel">
-                  <h4 className="detail-title">Grammar Focus</h4>
-                  {conversation.grammarNotes.map((note, noteIndex) => (
-                    <div key={`${conversation.title}-grammar-${noteIndex}`} className="detail-item">
-                      <div className="detail-item-title">{note.title}</div>
-                      <p>{note.explanation}</p>
-                      {note.pattern ? <code className="inline-code">{note.pattern}</code> : null}
-                      {note.examples?.length ? (
-                        <ul className="detail-list">
-                          {note.examples.map((example) => (
-                            <li key={example}>{example}</li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                  ))}
-                </section>
-
-                <section className="detail-panel">
-                  <h4 className="detail-title">Key Expressions</h4>
-                  <ul className="expression-list">
-                    {conversation.keyExpressions.map((item) => (
-                      <li key={item.de} className="expression-item">
-                        <span className="font-semibold">{item.de}</span>
-                        <span className="text-muted">{item.id}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-
-              <section className="detail-panel practice-panel">
-                <h4 className="detail-title">Latihan Singkat</h4>
-                {conversation.practice.map((question, questionIndex) => (
-                  <PracticeCard
-                    key={`${conversation.title}-practice-${questionIndex}`}
-                    question={question}
-                    questionKey={`${conversation.title}-${questionIndex}`}
-                  />
+            <div className="detail-grid">
+              <section className="detail-panel">
+                <h4 className="detail-title">Fokus Tata Bahasa</h4>
+                {activeConversation.grammarNotes.map((note, noteIndex) => (
+                  <div key={`${activeConversation.title}-grammar-${noteIndex}`} className="detail-item">
+                    <div className="detail-item-title">{note.title}</div>
+                    <p>{note.explanation}</p>
+                    {note.pattern ? <code className="inline-code">{note.pattern}</code> : null}
+                    {note.examples?.length ? (
+                      <ul className="detail-list">
+                        {note.examples.map((example) => (
+                          <li key={example}>{example}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
                 ))}
               </section>
-            </article>
-          ))}
+
+              <section className="detail-panel">
+                <h4 className="detail-title">Ekspresi Penting</h4>
+                <ul className="expression-list">
+                  {activeConversation.keyExpressions.map((item) => (
+                    <li key={item.de} className="expression-item">
+                      <span className="font-semibold">{item.de}</span>
+                      <span className="text-muted">{item.id}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <section className="detail-panel practice-panel">
+              <h4 className="detail-title">Latihan Singkat</h4>
+              {activeConversation.practice.map((question, questionIndex) => (
+                <PracticeCard
+                  key={`${activeConversation.title}-practice-${questionIndex}`}
+                  question={question}
+                  questionKey={`${activeConversation.title}-${questionIndex}`}
+                />
+              ))}
+            </section>
+          </article>
         </section>
       ) : (
         <section className="lesson-section" aria-labelledby="word-heading">
           <div className="section-heading-row">
             <h2 id="word-heading" className="section-title">3 Kata Hari Ini</h2>
-            <span className="section-meta">Arti + contoh + translate</span>
+            <span className="section-meta">Arti, contoh, dan cara pakainya</span>
           </div>
 
           <div className="word-grid">

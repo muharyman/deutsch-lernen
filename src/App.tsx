@@ -11,8 +11,8 @@ import SettingsTab from './components/tabs/SettingsTab';
 const TABS = [
   { id: 'today', label: 'Hari Ini' },
   { id: 'tracker', label: 'Tracker' },
-  { id: 'resources', label: 'Resources' },
-  { id: 'settings', label: 'Settings' },
+  { id: 'resources', label: 'Materi' },
+  { id: 'settings', label: 'Pengaturan' },
 ];
 
 const THEME_KEY = 'german-theme-v1';
@@ -93,7 +93,7 @@ export default function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Daily German practice with Gemini free tier</p>
+        <p>Latihan bahasa Jerman harian.</p>
       </footer>
     </div>
   );
