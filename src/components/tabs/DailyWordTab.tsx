@@ -4,15 +4,14 @@ import { useDailyWords } from '../../hooks/useDailyWords';
 
 interface DailyWordTabProps {
   level: Level;
-  geminiApiKey?: string;
 }
 
-export default function DailyWordTab({ level, geminiApiKey }: DailyWordTabProps) {
-  const { words, loading, source, error } = useDailyWords(level, geminiApiKey);
+export default function DailyWordTab({ level }: DailyWordTabProps) {
+  const { words, loading, source, error } = useDailyWords(level);
   const [revealedIdx, setRevealedIdx] = useState<Set<number>>(new Set());
 
   const toggleReveal = (i: number) => {
-    setRevealedIdx(prev => {
+    setRevealedIdx((prev) => {
       const next = new Set(prev);
       if (next.has(i)) next.delete(i);
       else next.add(i);
@@ -34,8 +33,8 @@ export default function DailyWordTab({ level, geminiApiKey }: DailyWordTabProps)
       <div className="card daily-header">
         <div className="daily-title">Kata Hari Ini</div>
         <div className="daily-subtitle">
-          {source === 'gemini' ? '✨ Dihasilkan oleh AI' : '📚 Dari koleksi statis'}
-          {' '} — Level {level}
+          {source === 'static' ? 'Dari koleksi statis' : 'Dihasilkan oleh AI di server'}
+          {' '} - Level {level}
         </div>
         {error && <div className="daily-error">{error}</div>}
       </div>

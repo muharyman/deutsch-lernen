@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type { DailyWord, Level } from '../types';
-import { fetchDailyWordsFromGemini } from '../lib/gemini';
 import { WORD_POOL } from '../data/wordPool';
 
 const CACHE_KEY = 'german-daily-words-v1';
@@ -9,12 +8,32 @@ interface CachedWords {
   date: string;
   level: Level;
   words: DailyWord[];
+  source: 'cache' | 'fresh_gemini' | 'static';
 }
 
-export function useDailyWords(level: Level, geminiApiKey?: string) {
+interface DailyWordsResponse {
+  words: DailyWord[];
+  source: 'cache' | 'fresh_gemini';
+}
+
+async function fetchDailyWords(date: string, level: Level): Promise<DailyWordsResponse> {
+  const response = await fetch(`/api/daily-words?date=${date}&level=${level}`);
+  const data = await response.json();
+
+  if (!response.ok) {
+    const message = typeof data?.error === 'string' && data.error.trim()
+      ? data.error
+      : 'Backend daily words gagal diakses.';
+    throw new Error(message);
+  }
+
+  return data as DailyWordsResponse;
+}
+
+export function useDailyWords(level: Level) {
   const [words, setWords] = useState<DailyWord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [source, setSource] = useState<'gemini' | 'static'>('static');
+  const [source, setSource] = useState<'cache' | 'fresh_gemini' | 'static'>('static');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,7 +52,7 @@ export function useDailyWords(level: Level, geminiApiKey?: string) {
           if (cached.date === today && cached.level === level && cached.words?.length) {
             if (!cancelled) {
               setWords(cached.words);
-              setSource('gemini');
+              setSource(cached.source === 'static' ? 'static' : 'cache');
               setLoading(false);
             }
             return;
@@ -43,22 +62,25 @@ export function useDailyWords(level: Level, geminiApiKey?: string) {
         // ignore
       }
 
-      // Try Gemini
-      if (geminiApiKey) {
-        try {
-          const geminiWords = await fetchDailyWordsFromGemini(level, geminiApiKey);
-          localStorage.setItem(
-            CACHE_KEY,
-            JSON.stringify({ date: today, level, words: geminiWords })
+      try {
+        const apiWords = await fetchDailyWords(today, level);
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ date: today, level, words: apiWords.words, source: apiWords.source })
+        );
+        if (!cancelled) {
+          setWords(apiWords.words);
+          setSource(apiWords.source);
+          setLoading(false);
+        }
+        return;
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? `${err.message}. Menggunakan kata statis.`
+              : 'Backend daily words gagal diakses. Menggunakan kata statis.'
           );
-          if (!cancelled) {
-            setWords(geminiWords);
-            setSource('gemini');
-            setLoading(false);
-          }
-          return;
-        } catch {
-          if (!cancelled) setError('Gemini tidak tersedia, menggunakan kata statis.');
         }
       }
 
@@ -82,7 +104,7 @@ export function useDailyWords(level: Level, geminiApiKey?: string) {
 
     load();
     return () => { cancelled = true; };
-  }, [level, geminiApiKey]);
+  }, [level]);
 
   return { words, loading, source, error };
 }

@@ -27,6 +27,7 @@ Repository guidance for Codex and future agents working in this project.
 ## Working Rule
 
 - If a task contains multiple independent changes, commit them separately in semantic order instead of waiting to commit everything at the end.
+- When asked to commit and push, prefer small focused commits by default. Do not bundle unrelated edits into a single commit just to finish faster.
 
 ## Task Startup Rule
 
@@ -44,6 +45,7 @@ Repository guidance for Codex and future agents working in this project.
 ## Architecture Notes
 
 - Daily lesson generation is now server-side through `GET /api/daily-lesson?date=YYYY-MM-DD`.
+- Daily words generation is now server-side through `GET /api/daily-words?date=YYYY-MM-DD&level=A1|A2|B1|B2`.
 - Shared daily cache is persisted in Vercel Blob private storage when `BLOB_READ_WRITE_TOKEN` is present.
 - For local development and tests without Blob, the backend falls back to filesystem storage. Override its location with `DAILY_LESSON_CACHE_DIR` when needed.
 - `GEMINI_API_KEY` is a server runtime environment variable. Do not reintroduce browser-side Gemini key flow for the main daily lesson path.
