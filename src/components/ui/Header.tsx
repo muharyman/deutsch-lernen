@@ -1,41 +1,49 @@
-import type { Level } from '../../types';
-
 interface HeaderProps {
-  level: Level;
+  activeDate: string;
   pct: number;
-  doneDays: number;
-  totalDays: number;
-  onLevelChange: (level: Level) => void;
+  doneInWindow: number;
+  windowDays: number;
+  completedDays: number;
+  streak: number;
 }
 
-const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2'];
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date(`${date}T12:00:00`));
+}
 
-export default function Header({ level, pct, doneDays, totalDays, onLevelChange }: HeaderProps) {
+export default function Header({
+  activeDate,
+  pct,
+  doneInWindow,
+  windowDays,
+  completedDays,
+  streak,
+}: HeaderProps) {
   return (
     <header className="app-header">
       <div className="header-top">
         <div>
-          <div className="header-subtitle">BELAJAR BAHASA JERMAN</div>
-          <div className="header-title">Deutsch Lernen {level}</div>
+          <div className="header-subtitle">DAILY GERMAN PRACTICE</div>
+          <h1 className="header-title">Deutsch Heute</h1>
+          <p className="header-date">{formatDate(activeDate)}</p>
         </div>
         <div className="header-stats">
           <div className="header-pct">{pct}%</div>
-          <div className="header-days">{doneDays}/{totalDays} hari</div>
+          <div className="header-days">{doneInWindow}/{windowDays} hari terakhir</div>
         </div>
       </div>
-      <div className="progress-bar">
+
+      <div className="progress-bar" aria-hidden="true">
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
-      <div className="level-selector">
-        {LEVELS.map(l => (
-          <button
-            key={l}
-            className={`level-btn ${level === l ? 'active' : ''}`}
-            onClick={() => onLevelChange(l)}
-          >
-            {l}
-          </button>
-        ))}
+
+      <div className="header-meta">
+        <span>Total selesai: {completedDays} hari</span>
+        <span>Streak: {streak} hari</span>
       </div>
     </header>
   );
