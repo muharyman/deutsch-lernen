@@ -31,15 +31,10 @@ export default function App() {
   const [theme, setTheme] = useState<Theme>(loadTheme);
   const { lesson, loading, error, activeDate } = useDailyLesson();
   const {
-    tracker,
-    recentDates,
     pct,
     completedDays,
     streak,
     todayDone,
-    windowDays,
-    doneInWindow,
-    toggleDate,
     setDayComplete,
   } = useTracker(activeDate);
 
@@ -53,34 +48,26 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <Header
-        activeDate={activeDate}
-        pct={pct}
-        doneInWindow={doneInWindow}
-        windowDays={windowDays}
-        completedDays={completedDays}
-        streak={streak}
-        theme={theme}
-        onToggleTheme={() => setTheme(current => (current === 'dark' ? 'light' : 'dark'))}
-      />
-
       <main className="app-content">
         {tab === 'home' ? (
-          <HomeTab
-            activeDate={activeDate}
-            lesson={lesson}
-            loading={loading}
-            error={error}
-            tracker={tracker}
-            recentDates={recentDates}
-            pct={pct}
-            doneInWindow={doneInWindow}
-            windowDays={windowDays}
-            completedDays={completedDays}
-            streak={streak}
-            todayDone={todayDone}
-            onToggleDate={toggleDate}
-          />
+          <>
+            <Header
+              activeDate={activeDate}
+              pct={pct}
+              completedDays={completedDays}
+              streak={streak}
+            />
+            <HomeTab
+              activeDate={activeDate}
+              lesson={lesson}
+              loading={loading}
+              error={error}
+              pct={pct}
+              completedDays={completedDays}
+              streak={streak}
+              todayDone={todayDone}
+            />
+          </>
         ) : null}
 
         {tab === 'today' ? (

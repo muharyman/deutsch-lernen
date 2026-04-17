@@ -1,26 +1,14 @@
-import type { DailyLessonPayload, DailyTrackerState } from '../../types';
+import type { DailyLessonPayload } from '../../types';
 
 interface HomeTabProps {
   activeDate: string;
   lesson: DailyLessonPayload | null;
   loading: boolean;
   error: string | null;
-  tracker: DailyTrackerState;
-  recentDates: string[];
   pct: number;
-  doneInWindow: number;
-  windowDays: number;
   completedDays: number;
   streak: number;
   todayDone: boolean;
-  onToggleDate: (date: string) => void;
-}
-
-function formatDay(date: string) {
-  return new Intl.DateTimeFormat('id-ID', {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(`${date}T12:00:00`));
 }
 
 function formatLongDate(date: string) {
@@ -36,15 +24,10 @@ export default function HomeTab({
   lesson,
   loading,
   error,
-  tracker,
-  recentDates,
   pct,
-  doneInWindow,
-  windowDays,
   completedDays,
   streak,
   todayDone,
-  onToggleDate,
 }: HomeTabProps) {
   return (
     <section className="animate-fade">
@@ -67,7 +50,6 @@ export default function HomeTab({
       <article className="card">
         <div className="section-heading-row">
           <h2 className="section-title">Progress tracker</h2>
-          <span className="section-meta">{doneInWindow}/{windowDays} hari aktif</span>
         </div>
         <div className="tracker-summary-grid">
           <div className="tracker-stat">
@@ -116,34 +98,6 @@ export default function HomeTab({
         {!loading && !error && !lesson ? (
           <p className="text-muted">Lesson harian belum tersedia.</p>
         ) : null}
-      </article>
-
-      <article className="card">
-        <div className="section-heading-row">
-          <h2 className="section-title">Tracker singkat</h2>
-          <span className="section-meta">Tekan untuk menandai</span>
-        </div>
-        <div className="tracker-calendar home-tracker-calendar">
-          {recentDates.map((date) => {
-            const done = Boolean(tracker[date]);
-
-            return (
-              <button
-                key={date}
-                type="button"
-                className={`tracker-date-btn ${done ? 'done' : ''}`}
-                onClick={() => onToggleDate(date)}
-                aria-pressed={done}
-                aria-label={`${formatDay(date)} ${done ? 'sudah selesai' : 'belum selesai'}`}
-              >
-                <span className="tracker-date-number">
-                  {new Date(`${date}T12:00:00`).getDate()}
-                </span>
-                <span className="tracker-date-label">{formatDay(date)}</span>
-              </button>
-            );
-          })}
-        </div>
       </article>
     </section>
   );

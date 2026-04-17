@@ -1,12 +1,8 @@
 interface HeaderProps {
   activeDate: string;
   pct: number;
-  doneInWindow: number;
-  windowDays: number;
   completedDays: number;
   streak: number;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
 }
 
 function formatDate(date: string) {
@@ -20,12 +16,8 @@ function formatDate(date: string) {
 export default function Header({
   activeDate,
   pct,
-  doneInWindow,
-  windowDays,
   completedDays,
   streak,
-  theme,
-  onToggleTheme,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -35,20 +27,8 @@ export default function Header({
           <h1 className="header-title">Deutsch Heute</h1>
           <p className="header-date">{formatDate(activeDate)}</p>
         </div>
-        <div className="header-side">
-          <button
-            type="button"
-            className="header-theme-btn"
-            onClick={onToggleTheme}
-            aria-label={`Ganti ke tema ${theme === 'dark' ? 'terang' : 'gelap'}`}
-            title={`Tema ${theme === 'dark' ? 'gelap' : 'terang'}`}
-          >
-            <span aria-hidden="true">{theme === 'dark' ? '☀️' : '🌙'}</span>
-          </button>
-          <div className="header-stats">
-            <div className="header-pct">{pct}%</div>
-            <div className="header-days">{doneInWindow}/{windowDays} hari terakhir</div>
-          </div>
+        <div className="header-stats">
+          <div className="header-pct">{pct}%</div>
         </div>
       </div>
 
