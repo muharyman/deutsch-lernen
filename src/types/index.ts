@@ -59,5 +59,53 @@ export interface DailyWord {
   meaning_id: string;
   example_de: string;
   example_id: string;
-  level: Level;
+  level?: Level;
+}
+
+export interface ConversationLine {
+  role: string;
+  de: string;
+  id: string;
+}
+
+export interface GrammarNote {
+  title: string;
+  explanation: string;
+  pattern?: string;
+  examples?: string[];
+}
+
+export interface PracticeQuestion {
+  type: 'multiple_choice' | 'short_answer';
+  prompt: string;
+  choices?: string[];
+  answer: string;
+  explanation: string;
+}
+
+export interface KeyExpression {
+  de: string;
+  id: string;
+}
+
+export interface DailyConversation {
+  title: string;
+  situation: string;
+  lines: ConversationLine[];
+  grammarNotes: GrammarNote[];
+  keyExpressions: KeyExpression[];
+  practice: PracticeQuestion[];
+}
+
+export interface DailyLessonPayload {
+  date: string;
+  theme: string;
+  conversations: DailyConversation[];
+  words: DailyWord[];
+  source?: 'gemini' | 'static';
+  cachedAt?: string;
+}
+
+export interface DailyTrackerState {
+  [date: string]: boolean;
 }
