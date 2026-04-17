@@ -3,19 +3,22 @@ import { useDailyLesson } from './hooks/useDailyLesson';
 import { useTracker } from './hooks/useTracker';
 import Header from './components/ui/Header';
 import TabBar from './components/ui/TabBar';
+import HomeTab from './components/tabs/HomeTab';
 import DailyLessonTab from './components/tabs/DailyLessonTab';
-import TrackerTab from './components/tabs/TrackerTab';
 import ResourceTab from './components/tabs/ResourceTab';
+import SettingsTab from './components/tabs/SettingsTab';
 
 const TABS = [
-  { id: 'today', label: 'Hari Ini' },
-  { id: 'tracker', label: 'Tracker' },
-  { id: 'resources', label: 'Materi' },
-];
+  { id: 'home', label: 'Home', icon: 'home' },
+  { id: 'today', label: 'Today', icon: 'today' },
+  { id: 'material', label: 'Material', icon: 'material' },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
+] as const;
 
 const THEME_KEY = 'german-theme-v1';
 
 type Theme = 'dark' | 'light';
+type AppTab = (typeof TABS)[number]['id'];
 
 function loadTheme(): Theme {
   const saved = localStorage.getItem(THEME_KEY);
@@ -24,7 +27,7 @@ function loadTheme(): Theme {
 }
 
 export default function App() {
-  const [tab, setTab] = useState('today');
+  const [tab, setTab] = useState<AppTab>('home');
   const [theme, setTheme] = useState<Theme>(loadTheme);
   const { lesson, loading, error, activeDate } = useDailyLesson();
   const {
@@ -61,9 +64,25 @@ export default function App() {
         onToggleTheme={() => setTheme(current => (current === 'dark' ? 'light' : 'dark'))}
       />
 
-      <TabBar tabs={TABS} active={tab} onChange={setTab} />
-
       <main className="app-content">
+        {tab === 'home' ? (
+          <HomeTab
+            activeDate={activeDate}
+            lesson={lesson}
+            loading={loading}
+            error={error}
+            tracker={tracker}
+            recentDates={recentDates}
+            pct={pct}
+            doneInWindow={doneInWindow}
+            windowDays={windowDays}
+            completedDays={completedDays}
+            streak={streak}
+            todayDone={todayDone}
+            onToggleDate={toggleDate}
+          />
+        ) : null}
+
         {tab === 'today' ? (
           <DailyLessonTab
             lesson={lesson}
@@ -74,18 +93,17 @@ export default function App() {
           />
         ) : null}
 
-        {tab === 'tracker' ? (
-          <TrackerTab
-            tracker={tracker}
-            recentDates={recentDates}
-            streak={streak}
-            completedDays={completedDays}
-            onToggleDate={toggleDate}
+        {tab === 'material' ? <ResourceTab /> : null}
+
+        {tab === 'settings' ? (
+          <SettingsTab
+            theme={theme}
+            onThemeChange={setTheme}
           />
         ) : null}
-
-        {tab === 'resources' ? <ResourceTab /> : null}
       </main>
+
+      <TabBar tabs={TABS} active={tab} onChange={(nextTab) => setTab(nextTab as AppTab)} />
 
       <footer className="app-footer">
         <p>Latihan bahasa Jerman harian.</p>
