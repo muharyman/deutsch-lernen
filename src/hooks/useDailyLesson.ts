@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
 import type { DailyLessonPayload } from '../types';
 import { createFallbackDailyLesson } from '../data/dailyLessonFallback';
-import { fetchDailyLessonFromGemini } from '../lib/gemini';
 
-const CACHE_KEY = 'german-daily-lesson-v1';
+const CACHE_KEY = 'german-daily-lesson-v2';
 
 interface CachedLesson {
   date: string;
   lesson: DailyLessonPayload;
+  source: 'cache' | 'fresh_gemini' | 'fallback';
+}
+
+interface DailyLessonResponse {
+  payload: DailyLessonPayload;
+  source: 'cache' | 'fresh_gemini' | 'fallback';
+}
+
+interface DailyLessonErrorResponse {
+  error?: string;
+  source?: 'fallback';
 }
 
 function getLocalDateKey() {
@@ -23,8 +33,8 @@ function readCache(date: string) {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const cached = JSON.parse(raw) as CachedLesson;
-    if (cached.date === date && cached.lesson) {
-      return cached.lesson;
+    if (cached.date === date && cached.lesson && cached.source) {
+      return cached;
     }
   } catch {
     // ignore broken cache
@@ -33,10 +43,27 @@ function readCache(date: string) {
   return null;
 }
 
-export function useDailyLesson(apiKey?: string) {
+async function fetchDailyLesson(date: string): Promise<DailyLessonResponse> {
+  const response = await fetch(`/api/daily-lesson?date=${date}`);
+  const data = (await response.json()) as DailyLessonResponse | DailyLessonErrorResponse;
+
+  if (!response.ok) {
+    const message = 'error' in data && typeof data.error === 'string' && data.error.trim()
+      ? data.error
+      : 'Backend daily lesson gagal diakses.';
+
+    throw new Error(
+      message
+    );
+  }
+
+  return data as DailyLessonResponse;
+}
+
+export function useDailyLesson() {
   const [lesson, setLesson] = useState<DailyLessonPayload | null>(null);
   const [loading, setLoading] = useState(true);
-  const [source, setSource] = useState<'gemini' | 'static'>('static');
+  const [source, setSource] = useState<'cache' | 'fresh_gemini' | 'fallback'>('fallback');
   const [error, setError] = useState<string | null>(null);
   const [activeDate, setActiveDate] = useState(getLocalDateKey);
 
@@ -57,41 +84,38 @@ export function useDailyLesson(apiKey?: string) {
         const cachedLesson = readCache(date);
         if (cachedLesson) {
           if (!cancelled) {
-            setLesson(cachedLesson);
-            setSource(cachedLesson.source === 'gemini' ? 'gemini' : 'static');
+            setLesson(cachedLesson.lesson);
+            setSource(cachedLesson.source === 'fallback' ? 'fallback' : 'cache');
             setLoading(false);
           }
           return;
         }
 
-        if (apiKey?.trim()) {
-          try {
-            const geminiLesson = await fetchDailyLessonFromGemini(apiKey.trim(), date);
-            localStorage.setItem(
-              CACHE_KEY,
-              JSON.stringify({
-                date,
-                lesson: geminiLesson,
-              } satisfies CachedLesson)
-            );
+        try {
+          const apiLesson = await fetchDailyLesson(date);
+          localStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({
+              date,
+              lesson: apiLesson.payload,
+              source: apiLesson.source,
+            } satisfies CachedLesson)
+          );
 
-            if (!cancelled) {
-              setLesson(geminiLesson);
-              setSource('gemini');
-              setLoading(false);
-            }
-            return;
-          } catch (err) {
-            if (!cancelled) {
-              setError(
-                err instanceof Error
-                  ? `${err.message}. Menampilkan materi fallback lokal.`
-                  : 'Gemini gagal diakses. Menampilkan materi fallback lokal.'
-              );
-            }
+          if (!cancelled) {
+            setLesson(apiLesson.payload);
+            setSource(apiLesson.source);
+            setLoading(false);
           }
-        } else if (!cancelled) {
-          setError('Masukkan Gemini API key agar materi harian dibuat oleh Gemini free tier.');
+          return;
+        } catch (err) {
+          if (!cancelled) {
+            setError(
+              err instanceof Error
+                ? `${err.message}. Menampilkan materi fallback lokal.`
+                : 'Backend daily lesson gagal diakses. Menampilkan materi fallback lokal.'
+            );
+          }
         }
 
         const fallbackLesson = createFallbackDailyLesson(date);
@@ -100,12 +124,13 @@ export function useDailyLesson(apiKey?: string) {
           JSON.stringify({
             date,
             lesson: fallbackLesson,
+            source: 'fallback',
           } satisfies CachedLesson)
         );
 
         if (!cancelled) {
           setLesson(fallbackLesson);
-          setSource('static');
+          setSource('fallback');
           setLoading(false);
         }
       }
@@ -116,7 +141,7 @@ export function useDailyLesson(apiKey?: string) {
         cancelled = true;
       };
     },
-    [apiKey]
+    []
   );
 
   return { lesson, loading, source, error, activeDate };

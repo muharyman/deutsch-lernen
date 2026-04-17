@@ -16,8 +16,6 @@ const TABS = [
 ];
 
 const THEME_KEY = 'german-theme-v1';
-const API_KEY_STORAGE = 'german-gemini-api-key-v1';
-const DEFAULT_GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY?.trim() ?? '';
 
 type Theme = 'dark' | 'light';
 
@@ -27,17 +25,10 @@ function loadTheme(): Theme {
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
 
-function loadGeminiKey() {
-  return localStorage.getItem(API_KEY_STORAGE)?.trim() ?? '';
-}
-
 export default function App() {
   const [tab, setTab] = useState('today');
   const [theme, setTheme] = useState<Theme>(loadTheme);
-  const [localApiKey, setLocalApiKey] = useState(loadGeminiKey);
-
-  const activeApiKey = localApiKey || DEFAULT_GEMINI_KEY || undefined;
-  const { lesson, loading, source, error, activeDate } = useDailyLesson(activeApiKey);
+  const { lesson, loading, source, error, activeDate } = useDailyLesson();
   const {
     tracker,
     recentDates,
@@ -57,13 +48,6 @@ export default function App() {
       localStorage.setItem(THEME_KEY, theme);
     },
     [theme]
-  );
-
-  useEffect(
-    function syncApiKey() {
-      localStorage.setItem(API_KEY_STORAGE, localApiKey);
-    },
-    [localApiKey]
   );
 
   return (
@@ -86,7 +70,6 @@ export default function App() {
             loading={loading}
             source={source}
             error={error}
-            hasApiKey={Boolean(activeApiKey)}
             todayDone={todayDone}
             onToggleDone={() => setDayComplete(activeDate, !todayDone)}
           />
@@ -105,15 +88,7 @@ export default function App() {
         {tab === 'resources' ? <ResourceTab /> : null}
 
         {tab === 'settings' ? (
-          <SettingsTab
-            theme={theme}
-            onThemeChange={setTheme}
-            apiKey={localApiKey}
-            onApiKeyChange={setLocalApiKey}
-            onClearApiKey={() => setLocalApiKey('')}
-            hasEnvKey={Boolean(DEFAULT_GEMINI_KEY)}
-            usingLocalKey={Boolean(localApiKey)}
-          />
+          <SettingsTab theme={theme} onThemeChange={setTheme} />
         ) : null}
       </main>
 

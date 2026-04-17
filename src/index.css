@@ -400,6 +400,28 @@ select {
   margin-bottom: 1rem;
 }
 
+.lesson-switcher {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  padding: 0.5rem;
+}
+
+.lesson-switch-btn {
+  min-height: 44px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  font-weight: 700;
+}
+
+.lesson-switch-btn.active {
+  background: var(--brand);
+  color: #fffaf3;
+  border-color: transparent;
+}
+
 .conversation-card {
   overflow: hidden;
 }
