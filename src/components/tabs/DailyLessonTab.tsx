@@ -113,6 +113,9 @@ export default function DailyLessonTab({
 }: DailyLessonTabProps) {
   const [activeSection, setActiveSection] = useState<'conversations' | 'words'>('conversations');
   const [activeConversationIndex, setActiveConversationIndex] = useState(0);
+  const [openAccordion, setOpenAccordion] = useState<'grammar' | 'expressions' | 'practice'>(
+    'grammar'
+  );
   const [openWords, setOpenWords] = useState<Record<number, boolean>>({});
   const [showTranslation, setShowTranslation] = useState<Record<number, boolean>>({});
 
@@ -134,6 +137,59 @@ export default function DailyLessonTab({
   }
 
   const activeConversation = lesson.conversations[activeConversationIndex];
+  const accordionSections = [
+    {
+      id: 'grammar' as const,
+      title: 'Fokus Tata Bahasa',
+      content: (
+        <>
+          {activeConversation.grammarNotes.map((note, noteIndex) => (
+            <div key={`${activeConversation.title}-grammar-${noteIndex}`} className="detail-item">
+              <div className="detail-item-title">{note.title}</div>
+              <p>{note.explanation}</p>
+              {note.pattern ? <code className="inline-code">{note.pattern}</code> : null}
+              {note.examples?.length ? (
+                <ul className="detail-list">
+                  {note.examples.map((example) => (
+                    <li key={example}>{example}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ))}
+        </>
+      ),
+    },
+    {
+      id: 'expressions' as const,
+      title: 'Ekspresi Penting',
+      content: (
+        <ul className="expression-list accordion-expression-list">
+          {activeConversation.keyExpressions.map((item) => (
+            <li key={item.de} className="expression-item">
+              <span className="font-semibold">{item.de}</span>
+              <span className="text-muted">{item.id}</span>
+            </li>
+          ))}
+        </ul>
+      ),
+    },
+    {
+      id: 'practice' as const,
+      title: 'Latihan',
+      content: (
+        <div className="practice-panel accordion-practice-panel">
+          {activeConversation.practice.map((question, questionIndex) => (
+            <PracticeCard
+              key={`${activeConversation.title}-practice-${questionIndex}`}
+              question={question}
+              questionKey={`${activeConversation.title}-${questionIndex}`}
+            />
+          ))}
+        </div>
+      ),
+    },
+  ];
 
   return (
     <section className="animate-fade">
@@ -194,7 +250,10 @@ export default function DailyLessonTab({
                   role="tab"
                   aria-selected={activeConversationIndex === index}
                   className={`conversation-tab-btn ${activeConversationIndex === index ? 'active' : ''}`}
-                  onClick={() => setActiveConversationIndex(index)}
+                  onClick={() => {
+                    setActiveConversationIndex(index);
+                    setOpenAccordion('grammar');
+                  }}
                 >
                   {`${index + 1}`}
                 </button>
@@ -250,48 +309,47 @@ export default function DailyLessonTab({
               })}
             </div>
 
-            <div className="detail-grid">
-              <section className="detail-panel">
-                <h4 className="detail-title">Fokus Tata Bahasa</h4>
-                {activeConversation.grammarNotes.map((note, noteIndex) => (
-                  <div key={`${activeConversation.title}-grammar-${noteIndex}`} className="detail-item">
-                    <div className="detail-item-title">{note.title}</div>
-                    <p>{note.explanation}</p>
-                    {note.pattern ? <code className="inline-code">{note.pattern}</code> : null}
-                    {note.examples?.length ? (
-                      <ul className="detail-list">
-                        {note.examples.map((example) => (
-                          <li key={example}>{example}</li>
-                        ))}
-                      </ul>
+            <div className="detail-accordion" aria-label="Detail pelajaran">
+              {accordionSections.map((section) => {
+                const isOpen = openAccordion === section.id;
+                const headerId = `${lesson.date}-${activeConversationIndex}-${section.id}-header`;
+                const panelId = `${lesson.date}-${activeConversationIndex}-${section.id}-panel`;
+
+                return (
+                  <section
+                    key={section.id}
+                    className={`detail-panel accordion-item ${isOpen ? 'open' : ''}`}
+                  >
+                    <h4 className="accordion-heading">
+                      <button
+                        id={headerId}
+                        type="button"
+                        className="accordion-trigger"
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => setOpenAccordion(section.id)}
+                      >
+                        <span className="detail-title accordion-title">{section.title}</span>
+                        <span className="chevron accordion-chevron" aria-hidden="true">
+                          {isOpen ? '-' : '+'}
+                        </span>
+                      </button>
+                    </h4>
+
+                    {isOpen ? (
+                      <div
+                        id={panelId}
+                        className="accordion-panel"
+                        role="region"
+                        aria-labelledby={headerId}
+                      >
+                        {section.content}
+                      </div>
                     ) : null}
-                  </div>
-                ))}
-              </section>
-
-              <section className="detail-panel">
-                <h4 className="detail-title">Ekspresi Penting</h4>
-                <ul className="expression-list">
-                  {activeConversation.keyExpressions.map((item) => (
-                    <li key={item.de} className="expression-item">
-                      <span className="font-semibold">{item.de}</span>
-                      <span className="text-muted">{item.id}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+                  </section>
+                );
+              })}
             </div>
-
-            <section className="detail-panel practice-panel">
-              <h4 className="detail-title">Latihan Singkat</h4>
-              {activeConversation.practice.map((question, questionIndex) => (
-                <PracticeCard
-                  key={`${activeConversation.title}-practice-${questionIndex}`}
-                  question={question}
-                  questionKey={`${activeConversation.title}-${questionIndex}`}
-                />
-              ))}
-            </section>
           </article>
         </section>
       ) : (

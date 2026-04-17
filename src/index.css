@@ -624,7 +624,8 @@ select {
   font-style: italic;
 }
 
-.detail-grid {
+.detail-grid,
+.detail-accordion {
   display: grid;
   gap: 0.75rem;
   margin-top: 0.9rem;
@@ -640,6 +641,52 @@ select {
 .detail-title {
   margin: 0 0 0.8rem;
   font-size: 1rem;
+}
+
+.accordion-item {
+  padding: 0;
+  overflow: hidden;
+}
+
+.accordion-item.open {
+  box-shadow: var(--shadow-soft);
+}
+
+.accordion-heading {
+  margin: 0;
+}
+
+.accordion-trigger {
+  width: 100%;
+  min-height: 64px;
+  padding: 0.95rem 1rem;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.accordion-title {
+  margin: 0;
+}
+
+.accordion-chevron {
+  flex-shrink: 0;
+}
+
+.accordion-panel {
+  padding: 0 1rem 1rem;
+}
+
+.accordion-expression-list {
+  margin-top: 0;
+}
+
+.accordion-practice-panel {
+  margin-top: 0;
 }
 
 .detail-item + .detail-item {
