@@ -113,9 +113,9 @@ export default function DailyLessonTab({
 }: DailyLessonTabProps) {
   const [activeSection, setActiveSection] = useState<'conversations' | 'words'>('conversations');
   const [activeConversationIndex, setActiveConversationIndex] = useState(0);
-  const [openAccordion, setOpenAccordion] = useState<'grammar' | 'expressions' | 'practice'>(
-    'grammar'
-  );
+  const [openAccordion, setOpenAccordion] = useState<
+    'grammar' | 'expressions' | 'practice' | null
+  >('grammar');
   const [openWords, setOpenWords] = useState<Record<number, boolean>>({});
   const [showTranslation, setShowTranslation] = useState<Record<number, boolean>>({});
 
@@ -327,7 +327,11 @@ export default function DailyLessonTab({
                         className="accordion-trigger"
                         aria-expanded={isOpen}
                         aria-controls={panelId}
-                        onClick={() => setOpenAccordion(section.id)}
+                        onClick={() =>
+                          setOpenAccordion((current) =>
+                            current === section.id ? null : section.id
+                          )
+                        }
                       >
                         <span className="detail-title accordion-title">{section.title}</span>
                         <span className="chevron accordion-chevron" aria-hidden="true">
