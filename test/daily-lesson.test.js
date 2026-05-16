@@ -7,12 +7,14 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import handler from '../api/daily-lesson.js';
 import { getDailyLesson } from '../api/_lib/daily-lesson-service.js';
 import { createDailyLessonStorage } from '../api/_lib/daily-lesson-storage.js';
+import { validateLesson } from '../api/_lib/daily-lesson-schema.js';
 
 function createLesson(date, theme = 'Tema dari Gemini') {
   return {
     date,
     theme,
     conversations: Array.from({ length: 3 }, (_, index) => ({
+      level: ['A1', 'A2', 'B1'][index],
       title: `Conversation ${index + 1}`,
       situation: `Situasi ${index + 1}`,
       lines: [
@@ -106,6 +108,19 @@ test('returns cache without calling Gemini again', async () => {
   assert.equal(geminiCalls, 1);
 
   await rm(baseDir, { force: true, recursive: true });
+});
+
+test('validates exactly three random-level dialogs', () => {
+  const payload = createLesson('2026-04-20');
+  payload.conversations[2].level = 'B2';
+
+  const lesson = validateLesson(payload, '2026-04-20');
+
+  assert.equal(lesson.conversations.length, 3);
+  assert.deepEqual(
+    lesson.conversations.map((conversation) => conversation.level),
+    ['A1', 'A2', 'B2']
+  );
 });
 
 test('parallel requests for the same date generate only once', async () => {
