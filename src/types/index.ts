@@ -89,6 +89,7 @@ export interface KeyExpression {
 }
 
 export interface DailyConversation {
+  level?: Level;
   title: string;
   situation: string;
   lines: ConversationLine[];
@@ -108,4 +109,51 @@ export interface DailyLessonPayload {
 
 export interface DailyTrackerState {
   [date: string]: boolean;
+}
+
+export interface MaterialExercise {
+  type: 'multiple_choice' | 'short_answer' | 'sentence_order' | 'speaking' | 'writing';
+  prompt: string;
+  choices?: string[];
+  answer?: string;
+  explanation: string;
+}
+
+export interface MaterialVocabulary {
+  de: string;
+  id: string;
+  example: string;
+}
+
+export interface MaterialLesson {
+  id: string;
+  level: Level;
+  chapter: number;
+  title: string;
+  minutes: number;
+  summary: string;
+  grammarFocus: string[];
+  keyPhrases: KeyExpression[];
+  vocabulary: MaterialVocabulary[];
+  examples: string[];
+  exercises: MaterialExercise[];
+}
+
+export interface MaterialChapter {
+  id: string;
+  level: Level;
+  number: number;
+  title: string;
+  goal: string;
+  lessons: MaterialLesson[];
+}
+
+export interface MaterialProgressItem {
+  read?: boolean;
+  practiced?: boolean;
+  completedAt?: string;
+}
+
+export interface MaterialProgressState {
+  [lessonId: string]: MaterialProgressItem;
 }
