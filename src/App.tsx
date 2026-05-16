@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDailyLesson } from './hooks/useDailyLesson';
+import { useMaterialProgress } from './hooks/useMaterialProgress';
 import { useTracker } from './hooks/useTracker';
 import Header from './components/ui/Header';
 import TabBar from './components/ui/TabBar';
 import HomeTab from './components/tabs/HomeTab';
 import DailyLessonTab from './components/tabs/DailyLessonTab';
-import ResourceTab from './components/tabs/ResourceTab';
+import MaterialTab from './components/tabs/MaterialTab';
+import ProgressTab from './components/tabs/ProgressTab';
 import SettingsTab from './components/tabs/SettingsTab';
 
 const TABS = [
   { id: 'home', label: 'Home', icon: 'home' },
   { id: 'today', label: 'Today', icon: 'today' },
   { id: 'material', label: 'Material', icon: 'material' },
+  { id: 'progress', label: 'Progress', icon: 'progress' },
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ] as const;
 
@@ -37,6 +40,7 @@ export default function App() {
     todayDone,
     setDayComplete,
   } = useTracker(activeDate);
+  const materialProgress = useMaterialProgress();
 
   useEffect(
     function syncTheme() {
@@ -66,6 +70,8 @@ export default function App() {
               completedDays={completedDays}
               streak={streak}
               todayDone={todayDone}
+              materialPct={materialProgress.overallPct}
+              nextLesson={materialProgress.nextLesson}
             />
           </>
         ) : null}
@@ -80,7 +86,22 @@ export default function App() {
           />
         ) : null}
 
-        {tab === 'material' ? <ResourceTab /> : null}
+        {tab === 'material' ? (
+          <MaterialTab
+            progress={materialProgress.progress}
+            onSetLessonStatus={materialProgress.setLessonStatus}
+          />
+        ) : null}
+
+        {tab === 'progress' ? (
+          <ProgressTab
+            overallPct={materialProgress.overallPct}
+            completedTotal={materialProgress.completedTotal}
+            totalLessons={materialProgress.totalLessons}
+            nextLesson={materialProgress.nextLesson}
+            getLevelSummary={materialProgress.getLevelSummary}
+          />
+        ) : null}
 
         {tab === 'settings' ? (
           <SettingsTab

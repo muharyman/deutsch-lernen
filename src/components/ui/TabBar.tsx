@@ -1,7 +1,7 @@
 interface Tab {
   id: string;
   label: string;
-  icon: 'home' | 'today' | 'material' | 'settings';
+  icon: 'home' | 'today' | 'material' | 'progress' | 'settings';
 }
 
 interface TabBarProps {
@@ -50,6 +50,18 @@ function TabIcon({ icon }: { icon: Tab['icon'] }) {
         <path d="M5 5.5v16" />
         <path d="M7.5 7H16" />
         <path d="M7.5 11H16" />
+      </svg>
+    );
+  }
+
+  if (icon === 'progress') {
+    return (
+      <svg {...commonProps}>
+        <path d="M4 19V5" />
+        <path d="M4 19h16" />
+        <path d="M8 16v-5" />
+        <path d="M12 16V8" />
+        <path d="M16 16v-9" />
       </svg>
     );
   }

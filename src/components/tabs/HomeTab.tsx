@@ -1,4 +1,5 @@
 import type { DailyLessonPayload } from '../../types';
+import type { MaterialLesson } from '../../types';
 
 interface HomeTabProps {
   activeDate: string;
@@ -9,6 +10,8 @@ interface HomeTabProps {
   completedDays: number;
   streak: number;
   todayDone: boolean;
+  materialPct: number;
+  nextLesson: MaterialLesson | null;
 }
 
 function formatLongDate(date: string) {
@@ -28,6 +31,8 @@ export default function HomeTab({
   completedDays,
   streak,
   todayDone,
+  materialPct,
+  nextLesson,
 }: HomeTabProps) {
   return (
     <section className="animate-fade">
@@ -65,11 +70,24 @@ export default function HomeTab({
             <span className="tracker-stat-label">total hari selesai</span>
           </div>
           <div className="tracker-stat">
-            <span className="tracker-stat-value">{todayDone ? 'On' : 'Off'}</span>
-            <span className="tracker-stat-label">status hari ini</span>
+            <span className="tracker-stat-value">{materialPct}%</span>
+            <span className="tracker-stat-label">materi A1-B2</span>
           </div>
         </div>
       </article>
+
+      {nextLesson ? (
+        <article className="card">
+          <div className="section-heading-row">
+            <h2 className="section-title">Materi berikutnya</h2>
+            <span className="section-meta">{nextLesson.level}</span>
+          </div>
+          <div className="home-lesson-preview">
+            <h3 className="home-lesson-theme">{nextLesson.title}</h3>
+            <p className="tracker-copy">{nextLesson.summary}</p>
+          </div>
+        </article>
+      ) : null}
 
       <article className="card">
         <div className="section-heading-row">
