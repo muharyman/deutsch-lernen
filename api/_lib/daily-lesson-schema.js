@@ -44,7 +44,10 @@ function normalizePractice(input) {
 }
 
 function normalizeConversation(input) {
+  const level = ['A1', 'A2', 'B1', 'B2'].includes(input?.level) ? input.level : undefined;
+
   return {
+    level,
     title: String(input?.title ?? '').trim(),
     situation: String(input?.situation ?? '').trim(),
     lines: Array.isArray(input?.lines)
@@ -74,7 +77,7 @@ export function validateLesson(payload, expectedDate) {
   const words = Array.isArray(payload?.words) ? payload.words.map(normalizeWord) : [];
 
   if (conversations.length !== 3) {
-    throw new Error('Gemini harus mengembalikan tepat 3 conversation.');
+    throw new Error('Gemini harus mengembalikan tepat 3 dialog.');
   }
 
   if (words.length !== 3) {
@@ -96,13 +99,15 @@ export async function fetchDailyLessonFromGemini(apiKey, date) {
 Buat materi latihan bahasa Jerman untuk 1 hari tanggal ${date}.
 
 Kebutuhan:
-- Tepat 3 conversation berbeda.
+- Tepat 3 dialog berbeda, dipilih random lintas level A1, A2, B1, dan B2.
+- Dialog tidak harus mengikuti level aktif user. Campur level dan topik secara acak setiap tanggal.
 - Tepat 3 kata harian berbeda.
 - Semua penjelasan dalam bahasa Indonesia.
 - Dialog dan contoh kalimat harus dalam bahasa Jerman natural.
-- Level campuran ringan-menengah, cocok untuk pembelajar umum.
-- Conversation harus praktis untuk situasi sehari-hari.
-- Setiap conversation wajib punya:
+- Jangan menyalin teks dari buku berhak cipta; buat semua dialog, contoh, dan latihan secara orisinal.
+- Level A1-B1 boleh disejajarkan dengan progresi umum buku ajar Netzwerk Neu, sedangkan B2 berbasis CEFR umum.
+- Setiap dialog wajib punya:
+  - level: salah satu "A1", "A2", "B1", "B2"
   - title
   - situation
   - 4 sampai 6 lines
@@ -119,6 +124,7 @@ Balas HANYA JSON valid tanpa markdown, tanpa penjelasan tambahan, dengan struktu
   "theme": "tema singkat harian",
   "conversations": [
     {
+      "level": "A1",
       "title": "judul",
       "situation": "situasi singkat",
       "lines": [
@@ -189,4 +195,3 @@ Balas HANYA JSON valid tanpa markdown, tanpa penjelasan tambahan, dengan struktu
   const payload = extractJsonObject(text);
   return validateLesson(payload, date);
 }
-

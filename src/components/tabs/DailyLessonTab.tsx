@@ -268,6 +268,9 @@ export default function DailyLessonTab({
             <div className="conversation-header">
               <div className="conversation-header-line">
                 <div className="conversation-kicker">{`Percakapan ${activeConversationIndex + 1}`}</div>
+                {activeConversation.level ? (
+                  <span className="badge badge-a2">{activeConversation.level}</span>
+                ) : null}
               </div>
               <button
                 type="button"
